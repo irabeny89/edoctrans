@@ -25,11 +25,12 @@ const Home: NextPage<typeof config.app.en> = ({
   return (
     <main className="p-2 h-full">
       <Head>
-        <title>
+        {/* <title>
           {brand} | {title}
-        </title>
+        </title> */}
+        <title>{`${brand} | ${title}`}</title>
         <link rel="icon" href="/favicon.ico" />
-        {/* <meta name="description" content={description} /> */}
+        <meta name="description" content={description} />
       </Head>
 
       <header className="flex justify-between mb-10">
