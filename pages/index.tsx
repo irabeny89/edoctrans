@@ -1,22 +1,27 @@
 import type { GetStaticProps, NextPage } from "next";
-import config from "config";
 import Head from "next/head";
-import LocaleSelect from "components/LocaleSelect";
 import Translator from "components/Translator";
-import { MdLoop, MdOutlineWarningAmber } from "react-icons/md";
+import { englishLocale, frenchLocale } from "config";
+import Header from "components/Header";
 
+/**
+ * Runs server side and generates static props for the home page based on selected locale. Curently supports `English` and `French`.
+ * @param {*} { `locale` } can be `fr` otherwise defaults to `en`
+ * @returns {*} { `props` } locale data as props to the homepage component
+ */
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
-  // @ts-ignore
-  const props = config.app[locale];
+  const props = locale === "fr" ? frenchLocale : englishLocale;
 
-  return { props };
+  return {
+    props,
+  };
 };
 
-const Home: NextPage<typeof config.app.en> = ({
+const Home: NextPage<typeof englishLocale> = ({
   brand,
   copyRight,
   description,
-  fileSupport: { label, files },
+  fileSupport,
   translatorComponent,
   webPages: {
     home: { heading, paragraphs, title },
@@ -25,46 +30,25 @@ const Home: NextPage<typeof config.app.en> = ({
   return (
     <main className="p-2 h-full">
       <Head>
-        {/* <title>
-          {brand} | {title}
-        </title> */}
         <title>{`${brand} | ${title}`}</title>
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content={description} />
       </Head>
 
-      <header className="flex justify-between mb-10">
-        <h1 className="flex font-bold align-center text-xl">
-          <MdLoop className="mt-1" color="green" /> {brand}
-        </h1>
-        <LocaleSelect />
-      </header>
+      <Header brand={brand} />
 
-      <article className="min-h-screen">
-        <section className="flex flex-wrap justify-center gap-5">
-          <div className="md:w-1/2 mb-28 my-auto">
-            <h2 className="text-center text-2xl mb-8 font-semibold">
-              {heading}
-            </h2>
-            <div className="text-center">
-              {paragraphs.map((paragraph, i) => (
-                <p key={i}>{paragraph}</p>
-              ))}
-            </div>
-            <div className="my-8 mx-auto p-2 shadow bg-blue-100 rounded text-center w-fit">
-              <MdOutlineWarningAmber className="mx-auto" size="25" />{" "}
-              <p>{label}</p>
-              <ul>
-                {files.map((file) => (
-                  <li key={file}>&rarr; {file}</li>
-                ))}
-              </ul>
-            </div>
+      <article className="min-h-screen mb-20">
+        <section className="md:w-1/2 mx-auto space-y-14">
+          <h2 className="text-center text-2xl mb-8 font-semibold">{heading}</h2>
+          <div className="text-center">
+            {paragraphs.map((paragraph, i) => (
+              <p key={i}>{paragraph}</p>
+            ))}
           </div>
 
           <Translator
-            {...translatorComponent}
-            className="space-y-6 mb-28 text-slate-400"
+            {...{ translatorComponent, fileSupport }}
+            className="space-y-6 mb-28 text-slate-400 sm:w-2/3 md:w-11/12 lg:w-2/3 mx-auto"
           />
         </section>
       </article>

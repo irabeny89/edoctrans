@@ -1,43 +1,41 @@
-import Image from "next/image";
 import { TranslatorPropsType } from "types";
-import LocaleSelect from "./LocaleSelect";
-import { MdTranslate, MdDownload } from "react-icons/md";
+import useTranslatedDoc from "hooks/useTranslatedDoc";
+import TranslatorDialog from "./TranslatorDialog";
+import TranslatorForm from "./TranslatorForm";
+import TranslatorInfo from "./TranslatorInfo";
 
 export default function Translator({
-  buttonLabel: { translate, download },
-  inputLabel: { to, from },
-  successMessage,
-  failMessage,
+  translatorComponent: {
+    buttonLabel,
+    inputLabel,
+    failMessage,
+    fileSizeError,
+    quickStart,
+  },
+  fileSupport,
   ...rest
 }: TranslatorPropsType) {
+  const {
+    renderTranslatedDoc,
+    translatedDoc,
+    setTranslatedDoc,
+    isTranslating,
+    setIsTranslating,
+  } = useTranslatedDoc();
+
   return (
     <div {...rest}>
-      <div className="text-center">
-        <Image src="/add_files.svg" width="200" height="200" />
-      </div>
-      <input
-        type="file"
-        className="py-1 rounded file:rounded-lg file:bg-purple-900 file:text-white file:py-2 file:shadow file:ring-0"
+      <TranslatorDialog doc={translatedDoc} setDoc={setTranslatedDoc} />
+      <TranslatorInfo {...{ fileSupport, quickStart }} />
+      <TranslatorForm
+        buttonLabel={buttonLabel}
+        inputLabel={inputLabel}
+        fileSizeError={fileSizeError}
+        failMessage={failMessage}
+        renderTranslatedDoc={renderTranslatedDoc}
+        isTranslating={isTranslating}
+        setIsTranslating={setIsTranslating}
       />
-
-      <div className="flex justify-between">
-        <label>
-          {from}
-          <LocaleSelect />
-        </label>
-        <label>
-          {to}
-          <LocaleSelect />
-        </label>
-      </div>
-
-      <button className="flex justify-center py-2 bg-blue-600 text-white rounded shadow w-full">
-        <MdTranslate size="25" /> {translate}
-      </button>
-      <hr />
-      <button className="flex justify-center py-2 bg-green-600 text-white rounded shadow w-full">
-        <MdDownload size="25" /> {download}
-      </button>
     </div>
   );
 }
