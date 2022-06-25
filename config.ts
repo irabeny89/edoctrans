@@ -1,4 +1,6 @@
-export const envVariables = {};
+export const envVariables = {
+  gtmId: process.env.NEXT_PUBLIC_GTM_ID
+};
 
 export const errorMessages = {
   error500: "Something went wrong. Retry or contact the developer.",
