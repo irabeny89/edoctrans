@@ -127,7 +127,7 @@ export const englishLocale = {
     label: "Current Support",
     files: ["docx"],
   },
-  copyRight: 2022,
+  copyRight: "2022",
   translatorComponent: {
     inputLabel: {
       to: "To",
@@ -136,6 +136,7 @@ export const englishLocale = {
       title: "Easy Steps",
       quickSteps: ["Upload file", "Select Desired Language", "Translate."],
     },
+    dragNdropHint: "Drag and Drop `docx` File",
     buttonLabel: { translate: "Translate" },
     failMessage: "Oops, failed to translate. Try again.",
     fileSizeError: "Select file less than 2mb.",
@@ -162,19 +163,20 @@ export const frenchLocale = {
     label: "Prise en charge actuelle",
     files: ["docx"],
   },
-  copyRight: 2022,
+  copyRight: "2022",
   translatorComponent: {
     inputLabel: {
       from: "De",
       to: "À",
     },
     quickStart: {
-      title: "Easy Steps",
-      quickSteps: ["Upload file", "Select desired language", "Translate."],
+      title: "Etapes Faciles",
+      quickSteps: ["Televerser un fichier", "Selectionnez la langue souhaitee", "Traduire"],
     },
+    dragNdropHint: "Faites glisser et deposez le fichier docx",
     buttonLabel: { translate: "Traduire", download: "Télécharger" },
     failMessage: "Oups, impossible de traduire. Réessayer.",
-    maxSizeError: "Select file less than 2mb.",
+    maxSizeError: "Selectionner des fichiers de moins de 2 Mo.",
   },
   pageNotFound: "Page non trouvée",
   webPages: {

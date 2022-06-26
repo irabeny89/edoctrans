@@ -1,4 +1,4 @@
-import { CSSProperties } from "react";
+import { CSSProperties, ReactNode, FormEvent } from "react";
 
 type StylesType = {
   className?: string;
@@ -122,32 +122,9 @@ type LanguagesType = {
   zu: "Zulu";
 };
 
-type DefinitionsType = Partial<Record<WordType, string[]>>;
-
-type TranslateType = {
-  defaultDataOptions: DataOptionsType;
-  (
-    text: string,
-    sourceLang: keyof LanguagesType,
-    destLang: string,
-    dataOptions?: Partial<DataOptionsType>
-  ): Promise<TranslationResponseType | undefined>;
-};
-
-type DataOptionsType = Record<
-  | "returnRawResponse"
-  | "detailedTranslations"
-  | "definitionSynonyms"
-  | "detailedTranslationsSynonyms"
-  | "definitions"
-  | "defintionExamples"
-  | "examples"
-  | "removeStyles",
-  Boolean
->;
-
-type TranslationsType = {
-  [key: WordType]: (string | DetailedTranslationsSynonymsType)[];
+type FileSupportType = {
+  label: string;
+  files: string[];
 };
 
 type TranslationResponseType = {
@@ -159,52 +136,6 @@ type TranslationResponseType = {
   definitions?: DefinitionsType;
   examples?: string[];
 };
-
-type DetailedTranslationsSynonymsType = {
-  translation: string;
-  synonyms: string[];
-  frequency: number;
-};
-
-type WordType =
-  | "noun"
-  | "verb"
-  | "adjective"
-  | "adverb"
-  | "pronoun"
-  | "preposition"
-  | "conjuction"
-  | "determiner"
-  | "exclamation";
-
-type GetInfoType = {
-  (
-    word: string,
-    sourceLang: string,
-    destLang: string,
-    dataOptions: DataOptionsType
-  ): Promise<any>;
-  languages: LanguagesType;
-  defaultDataOptions: DataOptionsType;
-};
-
-type FileSupportType = {
-  label: string;
-  files: string[];
-};
-
-type TranslatorComponentType = {
-  inputLabel: InputLabelType;
-  buttonLabel: ButtonLabelType;
-  failMessage: string;
-  fileSizeError: string;
-  quickStart: QuickStartType;
-};
-
-type TranslatorPropsType = {
-  translatorComponent: TranslatorComponentType;
-  fileSupport: FileSupportType;
-} & StylesType;
 
 type LocaleSelectPropsType = StylesType & {
   handleSelect?: (e: FormEvent<HTMLSelectElement>) => Promise<boolean>;
@@ -228,30 +159,33 @@ type IntroPropsType = {
 
 type HeaderPropsType = Record<"brand", string> & StylesType;
 
-type UseTranslatedDocType = {
-  translatedDoc: string;
-  setTranslatedDoc: Dispatch<SetStateAction<string>>;
-  renderTranslatedDoc: (doc: File, locale: string) => Promise<void>;
-};
-
-function useTranslatedDoc(): UseTranslatedDocType;
-
 type TranslatorDialogPropsType = {
   doc: string;
   setDoc: Dispatch<SetStateAction<string>>;
 };
 
 type TranslatorFormPropsType = {
+  dragNdropHint: string;
   buttonLabel: ButtonLabelType;
   inputLabel: InputLabelType;
-  isTranslating: boolean;
-  setIsTranslating: Dispatch<SetStateAction<boolean>>;
   fileSizeError: string;
   failMessage: string;
-  renderTranslatedDoc: UseTranslatedDocType["renderTranslatedDoc"];
 } & StylesType;
 
 type TranslatorInfoPropsType = {
   fileSupport: FileSupportType;
   quickStart: QuickStartType;
 } & StylesType;
+
+type FooterPropsType = Record<"copyRight" | "brand", string>;
+
+type LayoutPropsType = Record<"children", ReactNode> &
+  Record<"brand" | "title" | "description" | "copyRight", string> &
+  StylesType;
+
+type PageIntroPropsType = {
+  route: string;
+  title: string;
+  heading: string;
+  paragraphs: string[];
+};

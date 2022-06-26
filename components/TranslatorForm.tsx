@@ -1,32 +1,54 @@
-import useFormError from "hooks/useFormError";
-import { DragEventHandler, FormEventHandler, useState, useRef } from "react";
+import {
+  DragEventHandler,
+  FormEventHandler,
+  useState,
+  useRef,
+  FormEvent,
+  useEffect,
+} from "react";
 import { MdTranslate, MdCheck, MdOutlineCancel } from "react-icons/md";
 import { TranslatorFormPropsType, TranslatorInputsType } from "types";
 import LocaleSelect from "./LocaleSelect";
 import { maxFileSize, supportedLanguages } from "config";
 import Image from "next/image";
+import { convertToHtml } from "mammoth";
+import dynamic from "next/dynamic";
+
+const TranslatorDialog = dynamic(() => import("./TranslatorDialog"));
 
 export default function TranslatorForm({
+  dragNdropHint,
   failMessage,
   fileSizeError,
   buttonLabel: { translate },
   inputLabel: { to },
-  renderTranslatedDoc,
-  isTranslating,
-  setIsTranslating,
 }: TranslatorFormPropsType) {
-  const {
-    handleFormError,
-    showFileError,
-    setShowFileError,
-    showFailError,
-    setShowFailError,
-  } = useFormError();
+  const [showFileError, setShowFileError] = useState(false),
+    [showFailError, setShowFailError] = useState(false),
+    [translatedDoc, setTranslatedDoc] = useState(""),
+    [isTranslating, setIsTranslating] = useState(false),
+    [hasUpload, setHasUpload] = useState(false);
 
-  const [hasUpload, setHasUpload] = useState(false),
-    fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+  const renderTranslatedDoc = async (doc: File, locale: string) => {
+      setIsTranslating(true);
+      const { value: html } = await convertToHtml(
+          // @ts-ignore
+          { arrayBuffer: doc.arrayBuffer() }
+        ),
+        body = JSON.stringify({ html, locale }),
+        res = await fetch("/api/translateHtml", {
+          body,
+          method: "post",
+          headers: [["Content-Type", "application/json"]],
+        }),
+        translation = await res.text();
+      setIsTranslating(false);
+
+      return setTranslatedDoc(translation);
+    },
+    handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
       e.preventDefault();
       const { file, locale } = Object.fromEntries(
           new FormData(e.currentTarget)
@@ -50,10 +72,22 @@ export default function TranslatorForm({
       files.length === 1 &&
         files[0].type === allowedType &&
         ((fileInputRef.current!.files = files), setHasUpload(!!files.length));
-    };
+    },
+    handleFormError = (event: FormEvent) => (
+      event.preventDefault(), event.stopPropagation(), setShowFileError(true)
+    );
+
+  useEffect(() => {
+    if (showFailError) {
+      const timerId = setTimeout(() => setShowFailError(false), 1e4);
+
+      return () => clearTimeout(timerId);
+    }
+  }, [showFailError]);
 
   return (
-    <div className="space-y-8">
+    <div className="space-y-6 mb-28 text-slate-400 sm:w-2/3 md:w-11/12 lg:w-2/3 mx-auto">
+      <TranslatorDialog doc={translatedDoc} setDoc={setTranslatedDoc} />
       <div
         className="text-center rounded-xl outline-dashed"
         onDragOver={(e) => e.preventDefault()}
@@ -66,7 +100,7 @@ export default function TranslatorForm({
           <MdOutlineCancel color="red" size={100} className="float-right" />
         )}
         <Image src="/add_files.svg" width="200" height="200" />
-        <p>Drag and Drop `docx` File</p>
+        <p>{dragNdropHint}</p>
       </div>
 
       {showFileError && <small className="text-red-400">{fileSizeError}</small>}

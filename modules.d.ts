@@ -136,9 +136,10 @@ type DetailedTranslationsSynonymsType = {
   frequency: number;
 };
 
-type TranslationsType = {
-  [key: WordType]: (string | DetailedTranslationsSynonymsType)[];
-};
+type TranslationsType = Record<
+  WordType,
+  (string | DetailedTranslationsSynonymsType)[]
+>;
 
 type TranslationResponseType = {
   word: string;
