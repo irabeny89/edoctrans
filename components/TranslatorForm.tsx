@@ -1,6 +1,6 @@
 import useFormError from "hooks/useFormError";
-import { FormEventHandler } from "react";
-import { MdTranslate } from "react-icons/md";
+import { DragEventHandler, FormEventHandler, useState, useRef } from "react";
+import { MdTranslate, MdCheck, MdOutlineCancel } from "react-icons/md";
 import { TranslatorFormPropsType, TranslatorInputsType } from "types";
 import LocaleSelect from "./LocaleSelect";
 import { maxFileSize, supportedLanguages } from "config";
@@ -23,26 +23,50 @@ export default function TranslatorForm({
     setShowFailError,
   } = useFormError();
 
-  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
-    e.preventDefault();
-    const { file, locale } = Object.fromEntries(
-        new FormData(e.currentTarget)
-      ) as TranslatorInputsType,
-      hasValidFileSize = maxFileSize > file.size;
+  const [hasUpload, setHasUpload] = useState(false),
+    fileInputRef = useRef<HTMLInputElement>(null);
 
-    try {
-      return hasValidFileSize
-        ? await renderTranslatedDoc(file, locale)
-        : handleFormError(e);
-    } catch (error) {
-      console.error(error), setIsTranslating(false), setShowFailError(true);
-    }
-  };
+  const handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
+      e.preventDefault();
+      const { file, locale } = Object.fromEntries(
+          new FormData(e.currentTarget)
+        ) as TranslatorInputsType,
+        hasValidFileSize = maxFileSize > file.size;
+
+      try {
+        return hasValidFileSize
+          ? await renderTranslatedDoc(file, locale)
+          : handleFormError(e);
+      } catch (error) {
+        console.error(error), setIsTranslating(false), setShowFailError(true);
+      }
+    },
+    handleDrop: DragEventHandler<HTMLDivElement> = (e) => {
+      e.preventDefault();
+      const allowedType =
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+        files = e.dataTransfer.files;
+
+      files.length === 1 &&
+        files[0].type === allowedType &&
+        ((fileInputRef.current!.files = files), setHasUpload(!!files.length));
+    };
 
   return (
     <div className="space-y-8">
-      <div className="text-center">
+      <div
+        className="text-center rounded-xl outline-dashed"
+        onDragOver={(e) => e.preventDefault()}
+        onDrop={handleDrop}
+      >
+        {hasUpload && !showFileError && (
+          <MdCheck color="lightgreen" size={100} className="float-right" />
+        )}
+        {showFileError && (
+          <MdOutlineCancel color="red" size={100} className="float-right" />
+        )}
         <Image src="/add_files.svg" width="200" height="200" />
+        <p>Drag and Drop `docx` File</p>
       </div>
 
       {showFileError && <small className="text-red-400">{fileSizeError}</small>}
@@ -50,6 +74,7 @@ export default function TranslatorForm({
         <div className="flex justify-between mx-auto">
           <input
             required
+            ref={fileInputRef}
             name="file"
             type="file"
             accept=".docx"
