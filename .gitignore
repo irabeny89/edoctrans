@@ -33,3 +33,4 @@ yarn-error.log*
 
 # typescript
 *.tsbuildinfo
+=7.21.4
