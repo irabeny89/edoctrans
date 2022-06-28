@@ -73,7 +73,7 @@ export default function TranslatorForm({
         files[0].type === allowedType &&
         ((fileInputRef.current!.files = files), setHasUpload(!!files.length));
     },
-    handleFormError = (event: FormEvent) => (
+    handleFormError: FormEventHandler<HTMLFormElement> = (event) => (
       event.preventDefault(), event.stopPropagation(), setShowFileError(true)
     );
 
@@ -89,9 +89,10 @@ export default function TranslatorForm({
     <div className="space-y-6 mb-28 text-slate-400 sm:w-2/3 md:w-11/12 lg:w-2/3 mx-auto">
       <TranslatorDialog doc={translatedDoc} setDoc={setTranslatedDoc} />
       <div
-        className="text-center rounded-xl outline-dashed"
+        className="text-center rounded-xl outline-dashed cursor-pointer"
         onDragOver={(e) => e.preventDefault()}
         onDrop={handleDrop}
+        onClick={() => fileInputRef.current!.click()}
       >
         {hasUpload && !showFileError && (
           <MdCheck color="lightgreen" size={100} className="float-right" />
@@ -99,7 +100,7 @@ export default function TranslatorForm({
         {showFileError && (
           <MdOutlineCancel color="red" size={100} className="float-right" />
         )}
-        <Image src="/add_files.svg" width="200" height="200" />
+        <Image alt="add file" src="/add_files.svg" width="200" height="200" />
         <p>{dragNdropHint}</p>
       </div>
 
