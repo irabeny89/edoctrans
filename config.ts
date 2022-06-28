@@ -1,3 +1,6 @@
+// test id for unit test
+export const selectTestId = "pageLocaleSelect"
+
 export const envVariables = {
   gtmId: process.env.NEXT_PUBLIC_GTM_ID
 };
@@ -176,7 +179,7 @@ export const frenchLocale = {
     dragNdropHint: "Faites glisser et deposez le fichier docx",
     buttonLabel: { translate: "Traduire", download: "Télécharger" },
     failMessage: "Oups, impossible de traduire. Réessayer.",
-    maxSizeError: "Selectionner des fichiers de moins de 2 Mo.",
+    fileSizeError: "Selectionner des fichiers de moins de 2 Mo.",
   },
   pageNotFound: "Page non trouvée",
   webPages: {

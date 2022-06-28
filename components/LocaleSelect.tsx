@@ -7,13 +7,17 @@ export default function LocaleSelect({
   handleSelect,
   locales,
 }: LocaleSelectPropsType) {
-  const { locale } = useRouter();
-  
+  const router = useRouter();
+
   const languages = Object.entries(locales);
 
   return (
     <div className={className} style={style}>
-      <select onChange={handleSelect} name="locale" defaultValue={locale}>
+      <select
+        onChange={handleSelect}
+        name="locale"
+        defaultValue={router?.locale}
+      >
         {languages.map(([locale, label]) => (
           <option key={locale} value={locale}>
             {label}

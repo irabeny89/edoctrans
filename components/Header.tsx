@@ -3,13 +3,13 @@ import { FormEvent } from "react";
 import { MdLoop } from "react-icons/md";
 import { HeaderPropsType } from "types";
 import LocaleSelect from "./LocaleSelect";
-import { supportedLocales } from "config";
+import { selectTestId, supportedLocales } from "config";
 
 export default function Header({ brand }: HeaderPropsType) {
-  const { push, route } = useRouter();
+  const router = useRouter();
 
   const handleLocaleSelect = (e: FormEvent<HTMLSelectElement>) =>
-    push(route, route, { locale: e.currentTarget.value });
+    router.push(router.route, router.route, { locale: e.currentTarget.value });
 
   return (
     <header className="flex justify-between mb-10">
@@ -19,6 +19,7 @@ export default function Header({ brand }: HeaderPropsType) {
       <LocaleSelect
         locales={supportedLocales}
         handleSelect={handleLocaleSelect}
+        data-testId={selectTestId}
       />
     </header>
   );
