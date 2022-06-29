@@ -137,6 +137,19 @@ type TranslationResponseType = {
   examples?: string[];
 };
 
+type TranslatorFormDataType = {
+  showFailError: boolean;
+  showFileError: boolean;
+  isTranslating: boolean;
+  hasUpload: boolean;
+  translatedDoc: string;
+};
+
+type TranslatorFormActionType = {
+  type: keyof TranslatorFormDataType;
+  payload: string | boolean;
+};
+
 type LocaleSelectPropsType = StylesType & {
   handleSelect?: (e: FormEvent<HTMLSelectElement>) => Promise<boolean>;
   locales: object;
@@ -161,7 +174,7 @@ type HeaderPropsType = Record<"brand", string> & StylesType;
 
 type TranslatorDialogPropsType = {
   doc: string;
-  setDoc: Dispatch<SetStateAction<string>>;
+  setDoc: (value: TranslatorFormActionType) => void
 };
 
 type TranslatorFormPropsType = {

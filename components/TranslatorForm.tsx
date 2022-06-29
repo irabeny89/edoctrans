@@ -1,18 +1,10 @@
-import {
-  DragEventHandler,
-  FormEventHandler,
-  useState,
-  useRef,
-  FormEvent,
-  useEffect,
-} from "react";
 import { MdTranslate, MdCheck, MdOutlineCancel } from "react-icons/md";
-import { TranslatorFormPropsType, TranslatorInputsType } from "types";
+import { TranslatorFormPropsType } from "types";
 import LocaleSelect from "./LocaleSelect";
-import { maxFileSize, supportedLanguages } from "config";
+import { supportedLanguages } from "config";
 import Image from "next/image";
-import { convertToHtml } from "mammoth";
 import dynamic from "next/dynamic";
+import useTranslatorForm from "hooks/useTranslatorForm";
 
 const TranslatorDialog = dynamic(() => import("./TranslatorDialog"));
 
@@ -23,71 +15,21 @@ export default function TranslatorForm({
   buttonLabel: { translate },
   inputLabel: { to },
 }: TranslatorFormPropsType) {
-  const [showFileError, setShowFileError] = useState(false),
-    [showFailError, setShowFailError] = useState(false),
-    [translatedDoc, setTranslatedDoc] = useState(""),
-    [isTranslating, setIsTranslating] = useState(false),
-    [hasUpload, setHasUpload] = useState(false);
-
-  const fileInputRef = useRef<HTMLInputElement>(null);
-
-  const renderTranslatedDoc = async (doc: File, locale: string) => {
-      setIsTranslating(true);
-      const { value: html } = await convertToHtml(
-          // @ts-ignore
-          { arrayBuffer: doc.arrayBuffer() }
-        ),
-        body = JSON.stringify({ html, locale }),
-        res = await fetch("/api/translateHtml", {
-          body,
-          method: "post",
-          headers: [["Content-Type", "application/json"]],
-        }),
-        translation = await res.text();
-      setIsTranslating(false);
-
-      return setTranslatedDoc(translation);
-    },
-    handleSubmit: FormEventHandler<HTMLFormElement> = async (e) => {
-      e.preventDefault();
-      const { file, locale } = Object.fromEntries(
-          new FormData(e.currentTarget)
-        ) as TranslatorInputsType,
-        hasValidFileSize = maxFileSize > file.size;
-
-      try {
-        return hasValidFileSize
-          ? await renderTranslatedDoc(file, locale)
-          : handleFormError(e);
-      } catch (error) {
-        console.error(error), setIsTranslating(false), setShowFailError(true);
-      }
-    },
-    handleDrop: DragEventHandler<HTMLDivElement> = (e) => {
-      e.preventDefault();
-      const allowedType =
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        files = e.dataTransfer.files;
-
-      files.length === 1 &&
-        files[0].type === allowedType &&
-        ((fileInputRef.current!.files = files), setHasUpload(!!files.length));
-    },
-    handleFormError: FormEventHandler<HTMLFormElement> = (event) => (
-      event.preventDefault(), event.stopPropagation(), setShowFileError(true)
-    );
-
-  useEffect(() => {
-    if (showFailError) {
-      const timerId = setTimeout(() => setShowFailError(false), 1e4);
-
-      return () => clearTimeout(timerId);
-    }
-  }, [showFailError]);
+  const {
+    setData,
+    handleDrop,
+    handleSubmit,
+    translatedDoc,
+    isTranslating,
+    fileInputRef,
+    hasUpload,
+    showFailError,
+    showFileError,
+  } = useTranslatorForm();
 
   return (
     <div className="space-y-6 mb-28 text-slate-400 sm:w-2/3 md:w-11/12 lg:w-2/3 mx-auto">
-      <TranslatorDialog doc={translatedDoc} setDoc={setTranslatedDoc} />
+      <TranslatorDialog doc={translatedDoc} setDoc={setData} />
       <div
         className="text-center rounded-xl outline-dashed cursor-pointer"
         onDragOver={(e) => e.preventDefault()}
@@ -113,7 +55,7 @@ export default function TranslatorForm({
             name="file"
             type="file"
             accept=".docx"
-            onChange={() => setShowFileError(false)}
+            onChange={() => setData({ type: "showFileError", payload: false })}
             className={`py-1 ${
               showFileError && "ring ring-red-400"
             } file:rounded-lg file:bg-purple-900 file:text-white file:py-2`}
@@ -140,7 +82,7 @@ export default function TranslatorForm({
         <div className="bg-red-500 text-white text-lg px-2 rounded">
           <button
             className="float-right font-bold ring ring-white rounded-full px-2"
-            onClick={() => setShowFailError(false)}
+            onClick={() => setData({ type: "showFailError", payload: false })}
           >
             X
           </button>

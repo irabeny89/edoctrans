@@ -7,7 +7,7 @@ export default function TranslationDialog({
   return (
     <dialog className="z-10 ring" open={!!doc}>
       <button
-        onClick={() => setDoc("")}
+        onClick={() => setDoc({ type: "translatedDoc", payload: "" })}
         className="bg-red-700 rounded p-1 text-white float-right font-bold"
       >
         X close
