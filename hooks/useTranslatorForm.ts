@@ -1,4 +1,4 @@
-import { maxFileSize } from "config";
+import { docxVerboseType, maxFileSize } from "config";
 import { convertToHtml } from "mammoth";
 import {
   DragEventHandler,
@@ -76,12 +76,11 @@ export default function useTranslatorForm() {
     },
     handleDrop: DragEventHandler<HTMLDivElement> = (e) => {
       e.preventDefault();
-      const allowedType =
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-        files = e.dataTransfer.files;
+
+      const files = e.dataTransfer.files;
 
       files.length === 1 &&
-        files[0].type === allowedType &&
+        files[0].type === docxVerboseType &&
         ((fileInputRef.current!.files = files),
         setData({ type: "hasUpload", payload: !!files.length }));
     },

@@ -1,7 +1,9 @@
 import Home from "pages/";
-import { englishLocale, frenchLocale, selectTestId } from "config";
-import { render, screen, cleanup } from "@testing-library/react";
-import userEvent from "@testing-library/user-event";
+import {
+  englishLocale,
+  frenchLocale,
+} from "config";
+import { render, screen } from "@testing-library/react";
 
 describe("Home Page", () => {
   test("should contain English texts", () => {

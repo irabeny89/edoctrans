@@ -26,7 +26,7 @@ export default function TranslatorInfo({
         <ol>
           {quickSteps.map((step) => (
             <li key={step}>
-              <b>&rarr; {step} &larr;</b>
+              <b>&raquo; {step} &laquo;</b>
             </li>
           ))}
         </ol>

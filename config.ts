@@ -1,6 +1,11 @@
 // test id for unit test
 export const selectTestId = "pageLocaleSelect"
 
+export const fileInputTestId = "fileInput"
+
+export const docxVerboseType =
+"application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+
 export const envVariables = {
   gtmId: process.env.NEXT_PUBLIC_GTM_ID
 };

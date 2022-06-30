@@ -1,7 +1,7 @@
 import { MdTranslate, MdCheck, MdOutlineCancel } from "react-icons/md";
 import { TranslatorFormPropsType } from "types";
 import LocaleSelect from "./LocaleSelect";
-import { supportedLanguages } from "config";
+import { fileInputTestId, supportedLanguages } from "config";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import useTranslatorForm from "hooks/useTranslatorForm";
@@ -50,6 +50,7 @@ export default function TranslatorForm({
       <form onSubmit={handleSubmit} className="space-y-7">
         <div className="flex justify-between mx-auto">
           <input
+            data-testId={fileInputTestId}
             required
             ref={fileInputRef}
             name="file"
