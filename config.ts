@@ -1,13 +1,13 @@
 // test id for unit test
-export const selectTestId = "pageLocaleSelect"
+export const selectTestId = "pageLocaleSelect";
 
-export const fileInputTestId = "fileInput"
+export const fileInputTestId = "fileInput";
 
 export const docxVerboseType =
-"application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+  "application/vnd.openxmlformats-officedocument.wordprocessingml.document";
 
 export const envVariables = {
-  gtmId: process.env.NEXT_PUBLIC_GTM_ID
+  gtmId: process.env.NEXT_PUBLIC_GTM_ID,
 };
 
 export const errorMessages = {
@@ -135,6 +135,9 @@ export const englishLocale = {
     label: "Current Support",
     files: ["docx"],
   },
+  textTranslator: {
+    inputPlaceholder: "Enter text to translate",
+  },
   copyRight: "2022",
   translatorComponent: {
     inputLabel: {
@@ -171,6 +174,9 @@ export const frenchLocale = {
     label: "Prise en charge actuelle",
     files: ["docx"],
   },
+  textTranslator: {
+    inputPlaceholder: "Enter text to translate",
+  },
   copyRight: "2022",
   translatorComponent: {
     inputLabel: {
@@ -179,7 +185,11 @@ export const frenchLocale = {
     },
     quickStart: {
       title: "Etapes Faciles",
-      quickSteps: ["Televerser un fichier", "Selectionnez la langue souhaitee", "Traduire"],
+      quickSteps: [
+        "Televerser un fichier",
+        "Selectionnez la langue souhaitee",
+        "Traduire",
+      ],
     },
     dragNdropHint: "Faites glisser et deposez le fichier docx",
     buttonLabel: { translate: "Traduire", download: "Télécharger" },

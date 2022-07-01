@@ -1,7 +1,12 @@
+import { supportedLocales, selectTestId } from "config";
 import Head from "next/head";
+import { useRouter } from "next/router";
+import { FormEvent } from "react";
+import { MdLoop } from "react-icons/md";
 import { LayoutPropsType } from "types";
 import Footer from "./Footer";
-import Header from "./Header";
+import LocaleSelect from "./LocaleSelect";
+import TextTranslator from "./TextTranslator";
 
 export default function Layout({
   children,
@@ -9,7 +14,13 @@ export default function Layout({
   title,
   description,
   copyRight,
+  textTranslator
 }: LayoutPropsType) {
+  const router = useRouter();
+
+  const handleLocaleSelect = (e: FormEvent<HTMLSelectElement>) =>
+    router.push(router.route, router.route, { locale: e.currentTarget.value });
+
   return (
     <main className="p-2 h-full">
       <Head>
@@ -17,7 +28,19 @@ export default function Layout({
         <link rel="icon" href="/favicon.ico" />
         <meta name="description" content={description} />
       </Head>
-      <Header brand={brand} />
+      <header className="mb-10">
+        <section className="flex justify-between mb-10">
+          <h1 className="flex font-bold align-center text-xl">
+            <MdLoop className="mt-1" color="green" /> {brand}
+          </h1>
+          <LocaleSelect
+            locales={supportedLocales}
+            handleSelect={handleLocaleSelect}
+            data-testid={selectTestId}
+          />
+        </section>
+        <TextTranslator {...textTranslator} />
+      </header>
       {children}
       <Footer brand={brand} copyRight={copyRight} />
     </main>

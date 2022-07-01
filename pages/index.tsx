@@ -16,6 +16,7 @@ const Home: NextPage<typeof englishLocale> = ({
   copyRight,
   description,
   fileSupport,
+  textTranslator,
   translatorComponent: { quickStart, ...rest },
   webPages: { home },
 }) => {
@@ -25,6 +26,7 @@ const Home: NextPage<typeof englishLocale> = ({
       title={home.title}
       description={description}
       copyRight={copyRight}
+      textTranslator={textTranslator}
     >
       <article className="min-h-screen mb-20 md:w-1/2 mx-auto space-y-14">
         <PageIntro {...home} />

@@ -1,11 +1,11 @@
-import { CSSProperties, ReactNode, FormEvent } from "react";
+import { CSSProperties, ReactNode, FormEvent, ChangeEvent, SetStateAction } from "react";
 
 type StylesType = {
   className?: string;
   style?: CSSProperties;
 };
 
-type InputLabelType = Record<"to", string>;
+
 
 type ButtonLabelType = Record<"translate", string>;
 
@@ -122,10 +122,6 @@ type LanguagesType = {
   zu: "Zulu";
 };
 
-type FileSupportType = {
-  label: string;
-  files: string[];
-};
 
 type TranslationResponseType = {
   word: string;
@@ -150,8 +146,14 @@ type TranslatorFormActionType = {
   payload: string | boolean;
 };
 
+type TranslateTextRequestType ={
+  text: string;
+  locale: string;
+  res: NextApiResponse;
+}
+
 type LocaleSelectPropsType = StylesType & {
-  handleSelect?: (e: FormEvent<HTMLSelectElement>) => Promise<boolean>;
+  handleSelect?: (e: ChangeEvent<HTMLSelectElement>) => void;
   locales: object;
 };
 
@@ -173,8 +175,9 @@ type IntroPropsType = {
 type HeaderPropsType = Record<"brand", string> & StylesType;
 
 type TranslatorDialogPropsType = {
-  doc: string;
-  setDoc: (value: TranslatorFormActionType) => void
+  data: string | TranslationResponseType;
+  close: (value: TranslatorFormActionType | SetStateAction) => void;
+  html?: boolean;
 };
 
 type TranslatorFormPropsType = {
@@ -191,9 +194,12 @@ type TranslatorInfoPropsType = {
 } & StylesType;
 
 type FooterPropsType = Record<"copyRight" | "brand", string>;
-
+type TextTranslatorDataType = {
+  inputPlaceholder: string;
+};
 type LayoutPropsType = Record<"children", ReactNode> &
   Record<"brand" | "title" | "description" | "copyRight", string> &
+  Record<"textTranslator", TextTranslatorDataType> &
   StylesType;
 
 type PageIntroPropsType = {

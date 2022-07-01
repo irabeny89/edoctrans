@@ -6,7 +6,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import useTranslatorForm from "hooks/useTranslatorForm";
 
-const TranslatorDialog = dynamic(() => import("./TranslatorDialog"));
+const Dialog = dynamic(() => import("./Dialog"));
 
 export default function TranslatorForm({
   dragNdropHint,
@@ -27,9 +27,11 @@ export default function TranslatorForm({
     showFileError,
   } = useTranslatorForm();
 
+  const handleClose = () => setData({ type: "translatedDoc", payload: "" })
+
   return (
     <div className="space-y-6 mb-28 text-slate-400 sm:w-2/3 md:w-11/12 lg:w-2/3 mx-auto">
-      <TranslatorDialog doc={translatedDoc} setDoc={setData} />
+      <Dialog data={translatedDoc} close={handleClose} html />
       <div
         className="text-center rounded-xl outline-dashed cursor-pointer"
         onDragOver={(e) => e.preventDefault()}
@@ -50,7 +52,7 @@ export default function TranslatorForm({
       <form onSubmit={handleSubmit} className="space-y-7">
         <div className="flex justify-between mx-auto">
           <input
-            data-testId={fileInputTestId}
+            data-testid={fileInputTestId}
             required
             ref={fileInputRef}
             name="file"

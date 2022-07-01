@@ -128,7 +128,26 @@ type WordType =
   | "determiner"
   | "exclamation";
 
-type DefinitionsType = Partial<Record<WordType, string[]>>;
+type DetailedDefinitionSynonymsType = Partial<
+  Record<"normal" | "archaic" | "child language", string[]>
+>;
+
+type DetailedDefinitionsType = {
+  definition?: string;
+  synonyms?: DetailedDefinitionSynonymsType;
+  example?: string;
+};
+
+type FileSupportType = {
+  label: string;
+  files: string[];
+};
+
+type InputLabelType = Record<"to", string>;
+
+type DefinitionsType = Partial<
+  Record<WordType, (string | DetailedDefinitionsType)[]>
+>;
 
 type DetailedTranslationsSynonymsType = {
   translation: string;
@@ -136,9 +155,8 @@ type DetailedTranslationsSynonymsType = {
   frequency: number;
 };
 
-type TranslationsType = Record<
-  WordType,
-  (string | DetailedTranslationsSynonymsType)[]
+type TranslationsType = Partial<
+  Record<WordType, (string | DetailedTranslationsSynonymsType)[]>
 >;
 
 type TranslationResponseType = {
@@ -157,7 +175,7 @@ type DataOptionsType = Record<
   | "definitionSynonyms"
   | "detailedTranslationsSynonyms"
   | "definitions"
-  | "defintionExamples"
+  | "definitionExamples"
   | "examples"
   | "removeStyles",
   Boolean
@@ -172,6 +190,11 @@ type TranslateType = {
     dataOptions?: Partial<DataOptionsType>
   ): Promise<TranslationResponseType | undefined>;
 };
+
+type TranslationPropsType = [
+  string,
+  (string | DetailedTranslationsSynonymsType)[]
+][];
 
 declare module "google-translate-extended-api" {
   const translate: TranslateType;
