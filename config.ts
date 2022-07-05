@@ -137,6 +137,7 @@ export const englishLocale = {
   },
   textTranslator: {
     inputPlaceholder: "Enter text to translate",
+    failMessage: "Oops! Failed to translate. Try again.",
   },
   copyRight: "2022",
   translatorComponent: {
@@ -157,7 +158,7 @@ export const englishLocale = {
     home: {
       route: "/",
       title: "Home",
-      heading: "Translate Documents' Text",
+      heading: "Translate Documents & Texts",
       paragraphs: [
         "Freely translate documents' text in one language to another easily with top notch machine learning algorithm.",
       ],
@@ -176,6 +177,7 @@ export const frenchLocale = {
   },
   textTranslator: {
     inputPlaceholder: "Enter text to translate",
+    failMessage: "Oops! Failed to translate. Try again.",
   },
   copyRight: "2022",
   translatorComponent: {

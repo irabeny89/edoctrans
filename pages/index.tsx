@@ -4,6 +4,7 @@ import Layout from "components/Layout";
 import PageIntro from "components/PageIntro";
 import TranslatorInfo from "components/TranslatorInfo";
 import TranslatorForm from "components/TranslatorForm";
+import TextTranslator from "components/TextTranslator";
 
 export const getStaticProps: GetStaticProps = async ({ locale }) => {
   const props = locale === "fr" ? frenchLocale : englishLocale;
@@ -26,10 +27,10 @@ const Home: NextPage<typeof englishLocale> = ({
       title={home.title}
       description={description}
       copyRight={copyRight}
-      textTranslator={textTranslator}
     >
       <article className="min-h-screen mb-20 md:w-1/2 mx-auto space-y-14">
         <PageIntro {...home} />
+        <TextTranslator {...textTranslator} />
         <TranslatorInfo {...{ fileSupport, quickStart }} />
         <TranslatorForm {...rest} />
       </article>

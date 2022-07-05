@@ -1,11 +1,15 @@
-import { CSSProperties, ReactNode, FormEvent, ChangeEvent, SetStateAction } from "react";
+import {
+  CSSProperties,
+  ReactNode,
+  FormEvent,
+  ChangeEvent,
+  SetStateAction,
+} from "react";
 
 type StylesType = {
   className?: string;
   style?: CSSProperties;
 };
-
-
 
 type ButtonLabelType = Record<"translate", string>;
 
@@ -122,7 +126,6 @@ type LanguagesType = {
   zu: "Zulu";
 };
 
-
 type TranslationResponseType = {
   word: string;
   translation: string;
@@ -146,11 +149,11 @@ type TranslatorFormActionType = {
   payload: string | boolean;
 };
 
-type TranslateTextRequestType ={
+type TranslateTextRequestType = {
   text: string;
   locale: string;
   res: NextApiResponse;
-}
+};
 
 type LocaleSelectPropsType = StylesType & {
   handleSelect?: (e: ChangeEvent<HTMLSelectElement>) => void;
@@ -196,10 +199,10 @@ type TranslatorInfoPropsType = {
 type FooterPropsType = Record<"copyRight" | "brand", string>;
 type TextTranslatorDataType = {
   inputPlaceholder: string;
+  failMessage: string;
 };
 type LayoutPropsType = Record<"children", ReactNode> &
   Record<"brand" | "title" | "description" | "copyRight", string> &
-  Record<"textTranslator", TextTranslatorDataType> &
   StylesType;
 
 type PageIntroPropsType = {

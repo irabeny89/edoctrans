@@ -6,7 +6,6 @@ import { MdLoop } from "react-icons/md";
 import { LayoutPropsType } from "types";
 import Footer from "./Footer";
 import LocaleSelect from "./LocaleSelect";
-import TextTranslator from "./TextTranslator";
 
 export default function Layout({
   children,
@@ -14,7 +13,6 @@ export default function Layout({
   title,
   description,
   copyRight,
-  textTranslator
 }: LayoutPropsType) {
   const router = useRouter();
 
@@ -39,7 +37,6 @@ export default function Layout({
             data-testid={selectTestId}
           />
         </section>
-        <TextTranslator {...textTranslator} />
       </header>
       {children}
       <Footer brand={brand} copyRight={copyRight} />
