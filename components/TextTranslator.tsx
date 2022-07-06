@@ -39,7 +39,7 @@ export default function TextTranslator({
 
   return (
     <div className="text-center">
-      <Dialog data={translation ?? _failMessage} html close={handleClose} />
+      <Dialog data={translation ?? _failMessage} html={typeof translation !== "object"} close={handleClose} />
       <input
         onChange={handleChange}
         value={text}
